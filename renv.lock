@@ -9,16 +9,6 @@
     ]
   },
   "Packages": {
-    "here": {
-      "Package": "here",
-      "Version": "1.0.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "rprojroot"
-      ],
-      "Hash": "24b224366f9c2e7534d2344d10d59211"
-    },
     "renv": {
       "Package": "renv",
       "Version": "1.0.2",
@@ -29,15 +19,12 @@
       ],
       "Hash": "4b22ac016fe54028b88d0c68badbd061"
     },
-    "rprojroot": {
-      "Package": "rprojroot",
-      "Version": "2.0.3",
+    "testit": {
+      "Package": "testit",
+      "Version": "0.13",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "1de7ab598047a87bba48434ba35d497d"
+      "Hash": "996a96428543889c9420e516f59b18ac"
     }
   }
 }
