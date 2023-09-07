@@ -18,13 +18,6 @@
         "utils"
       ],
       "Hash": "4b22ac016fe54028b88d0c68badbd061"
-    },
-    "testit": {
-      "Package": "testit",
-      "Version": "0.13",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "996a96428543889c9420e516f59b18ac"
     }
   }
 }
