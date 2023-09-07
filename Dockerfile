@@ -1,6 +1,6 @@
 # get base image
 FROM rocker/r-base:latest as os
-ARG WORKSPACE=/project
+ARG WORKSPACE=/workspaces
 
 # update libraries & install packages
 RUN apt-get update -qq && \
