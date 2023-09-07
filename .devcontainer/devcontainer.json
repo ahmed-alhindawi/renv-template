@@ -1,6 +1,6 @@
 {
 	"name": "R-base",
-	"image": "base-r:latest",
+	"image": "ghcr.io/ahmed-alhindawi/renv-template:latest",
 	"workspaceMount": "",
 	"runArgs": [
 		"--volume=${localWorkspaceFolder}:/project/src/:Z",

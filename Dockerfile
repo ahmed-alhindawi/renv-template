@@ -11,6 +11,7 @@ RUN apt-get update -qq && \
       curl \
       cmake \
       libcurl4-openssl-dev \
+      openssh-client \
       git \
       libv8-dev \
       libharfbuzz-dev \
@@ -39,7 +40,7 @@ RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/down
 
 RUN pip3 install radian --break-system-packages
 
-RUN R -e "install.packages('renv', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN Rscript -e "install.packages(c('renv', 'languageserver'))"
 
 WORKDIR ${WORKSPACE}
 
