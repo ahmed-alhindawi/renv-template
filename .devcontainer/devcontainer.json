@@ -3,11 +3,11 @@
 	"image": "ghcr.io/ahmed-alhindawi/renv-template:latest",
 	"workspaceMount": "",
 	"runArgs": [
-		"--volume=${localWorkspaceFolder}:/project/src/:Z",
-		"--volume=${localWorkspaceFolder}/renv.lock:/project/renv.lock:Z",
-		"--volume=${localWorkspaceFolder}/.Rprofile:/project/.Rprofile:Z"
+		"--volume=${localWorkspaceFolder}:/workspaces/${localWorkspaceFolderBasename}/:Z",
+		"--volume=${localWorkspaceFolder}/renv.lock:/workspaces/renv.lock:Z",
+		"--volume=${localWorkspaceFolder}/.Rprofile:/workspaces/.Rprofile:Z"
 	],
-	"postStartCommand": "git config --global --add safe.directory /project/src/",
+	"postStartCommand": "git config --global --add safe.directory /workspaces/${localWorkspaceFolderBasename}",
 	"customizations": {
 		"vscode": {
 			"extensions": [

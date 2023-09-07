@@ -40,7 +40,7 @@ RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/down
 
 RUN pip3 install radian --break-system-packages
 
-RUN Rscript -e "install.packages(c('renv', 'languageserver'))"
+RUN R -e "install.packages(c('renv', 'languageserver'))"
 
 WORKDIR ${WORKSPACE}
 
