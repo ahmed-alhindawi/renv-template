@@ -50,14 +50,16 @@ FROM os as temp
 
 ARG WORKSPACE=/workspaces
 WORKDIR ${WORKSPACE}
+ENV RENV_CONFIG_SANDBOX_ENABLED=FALSE
 
 RUN mkdir -p renv
-COPY renv.lock renv.lock
-COPY .Rprofile .Rprofile
-COPY renv/activate.R renv/activate.R
-COPY renv/settings.json renv/settings.json
 
-RUN R -e "install.packages(c('renv', 'languageserver'))" -e "renv::restore(confirm=FALSE)" -e "renv::isolate()"
+COPY ../.Rprofile .Rprofile
+COPY ../renv/settings.json renv/settings.json
+COPY ../renv/activate.R renv/activate.R
+COPY ../renv.lock renv.lock
+
+RUN R -e "install.packages(c('renv', 'languageserver', 'httpgd'))" -e "renv::restore(confirm=FALSE)" -e "renv::isolate()"
 
 #########
 # STAGE 3
