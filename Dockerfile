@@ -40,7 +40,6 @@ RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/down
    rm -rf /var/lib/apt/lists/* && \
    rm -rf quarto.deb
 
-RUN apt-get update -qq && apt-get install python3-pip -y
 RUN pip3 install radian
 
 
