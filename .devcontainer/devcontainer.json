@@ -1,7 +1,9 @@
 {
 	"name": "R-base",
-	"image": "ghcr.io/ahmed-alhindawi/renv-template:latest",
+	"build": { "dockerfile": "Dockerfile",
+			   "context": ".." },
 	"workspaceMount": "",
+	"workspaceFolder": "/workspaces",
 	"runArgs": [
 		"--volume=${localWorkspaceFolder}:/workspaces/${localWorkspaceFolderBasename}/:Z",
 		"--volume=${localWorkspaceFolder}/renv.lock:/workspaces/renv.lock:Z",
