@@ -15,6 +15,7 @@ RUN apt-get update -qq && \
   libcurl4-openssl-dev \
   openssh-client \
   git \
+  pandoc \
   libv8-dev \
   libharfbuzz-dev \
   libfribidi-dev \ 
