@@ -6,13 +6,13 @@ FROM rocker/r-ver:${R_VERSION} AS os
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
   apt-get --no-install-recommends install -y \
+  git \
   libxml2-dev \
   python3-pip \
   curl \
   cmake \
   libcurl4-openssl-dev \
   openssh-client \
-  git \
   pandoc \
   jags \
   libv8-dev \
@@ -40,26 +40,17 @@ RUN pip3 install -U git+https://github.com/randy3k/radian
 # STAGE 2
 #########
 FROM os AS tmp
-WORKDIR /renv_build
+WORKDIR /workspaces
 ENV RENV_CONFIG_SANDBOX_ENABLED=FALSE
+
+# location of global cache
+ENV RENV_PATHS_CACHE /renv_cache
+# location of the renv cache on the host machine
+ENV RENV_PATHS_CACHE_HOST /path/to/renv_cache
+# where the cache should be mounted in the container
+ENV RENV_PATHS_CACHE_CONTAINER /renv_cache
 
 COPY renv.lock renv.lock
 COPY .Rprofile .Rprofile 
 COPY renv/activate.R renv/activate.R
 COPY renv/settings.json renv/settings.json
-
-# change default location of cache to project folder
-RUN mkdir renv/.cache
-ENV RENV_PATHS_CACHE renv/.cache
-
-RUN R -e "install.packages(c('languageserver'))"
-RUN R -e "install.packages('remotes')" -e "remotes::install_github('nx10/httpgd')"
-
-#########
-# STAGE 3
-#########
-FROM os
-WORKDIR /renv_build
-COPY --from=tmp /renv_build .
-
-RUN R -e "renv::restore()"

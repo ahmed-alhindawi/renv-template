@@ -1,15 +1,21 @@
 {
-	"name": "Simple",
-	"build": { "dockerfile" : "Dockerfile", "context" : ".." },
-	"workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,z",
-	"workspaceFolder": "/workspaces",
-	"postStartCommand": "ln -s /renv_build/renv/library/R-4.3/x86_64-pc-linux-gnu/* /workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"reditorsupport.r",
-				"quarto.quarto",
-				"usernamehw.errorlens"
+  "name": "Simple",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,z",
+  "workspaceFolder": "/workspaces",
+  "mounts": [
+    "source=/path/to/renv_cache,target=/renv_cache,type=bind,z,consistency=cached"
+  ],
+  "postStartCommand": "R -e 'renv::restore()' -e 'renv::isolate()'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "reditorsupport.r",
+        "quarto.quarto",
+        "usernamehw.errorlens"
       ]
     }
   }
