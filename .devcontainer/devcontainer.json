@@ -6,7 +6,7 @@
 	},
 	"workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind",
 	"workspaceFolder": "/workspaces",
-	"postStartCommand": "ln -s /renv_build/renv/library/R-4.3/x86_64-pc-linux-gnu/* /workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu",
+	"postStartCommand": "ln -s /renv_build/renv/library/R-4.3/x86_64-pc-linux-gnu/* /workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu 2> /dev/null || true",
 	"customizations": {
 		"vscode": {
 			"extensions": [
