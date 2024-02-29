@@ -1,20 +1,19 @@
-{
-	"name": "R-base",
-	"build": { "dockerfile": "Dockerfile",
-			   "context": ".." },
-	"workspaceMount": "",
+{	
+	"name": "Projectname",
+	"build": { 
+		"dockerfile" : "Dockerfile",
+		"context" : ".." 
+	},
+	"workspaceMount": "source=${localWorkspaceFolder}, target=/workspaces, type=bind,Z",
 	"workspaceFolder": "/workspaces",
-	"runArgs": [
-		"--volume=${localWorkspaceFolder}:/workspaces/${localWorkspaceFolderBasename}/:Z",
-		"--volume=${localWorkspaceFolder}/renv.lock:/workspaces/renv.lock:Z",
-		"--volume=${localWorkspaceFolder}/.Rprofile:/workspaces/.Rprofile:Z"
-	],
-	"postStartCommand": "git config --global --add safe.directory /workspaces/${localWorkspaceFolderBasename}",
+	"postStartCommand": "ln -s /renv_build/renv/library/R-4.3/x86_64-pc-linux-gnu/* /workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu",
 	"customizations": {
-		"vscode": {
-			"extensions": [
-				"REditorSupport.r"
-			]
-		}
-	}
+			"vscode": {
+				"extensions": [
+					"reditorsupport.r",
+					"quarto.quarto",
+					"usernamehw.errorlens"
+     				 ]
+  			}
+  	}
 }
