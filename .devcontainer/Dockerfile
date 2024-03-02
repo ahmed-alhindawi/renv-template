@@ -1,20 +1,21 @@
-ARG R_VERSION=4.3.2
-# get base image
+# Define R version
+ARG R_VERSION=4.3.3
+# Get base image
 FROM rocker/r-ver:${R_VERSION} AS os
 
-# update libraries & install packages
+# Update & install libraries/packages
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
   apt-get --no-install-recommends install -y \
   git \
-  libxml2-dev \
-  python3-pip \
   curl \
   cmake \
-  libcurl4-openssl-dev \
+  jags \
   openssh-client \
   pandoc \
-  jags \
+  python3-pip \
+  libxml2-dev \
+  libcurl4-openssl-dev \
   libv8-dev \
   libharfbuzz-dev \
   libfribidi-dev \ 
@@ -28,29 +29,37 @@ RUN apt-get update -qq && \
   libgdal-dev \
   libmagick++-dev \
   libglpk-dev \
-  r-cran-tcltk2 \
-  libfontconfig1-dev && \
+  libfontconfig1-dev \
+  r-cran-tcltk2  && \
   apt-get autoremove -y && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/* 
+  rm -rf /var/lib/apt/lists/*
 
+# Get quarto
+RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.550/quarto-1.4.550-linux-amd64.deb && \
+   apt-get update -qq && \
+   apt-get install ./quarto.deb && \
+   apt-get autoremove -y && \
+   apt-get clean && \
+   rm -rf /var/lib/apt/lists/* && \
+   rm -rf quarto.deb
+
+# Install tinytex for quarto pdf rendering
+RUN quarto install tinytex
+
+# Install radian console from github
 RUN pip3 install -U git+https://github.com/randy3k/radian
 
-#########
-# STAGE 2
-#########
-FROM os AS tmp
-WORKDIR /workspaces
+# Disable RENV sandbox
 ENV RENV_CONFIG_SANDBOX_ENABLED=FALSE
 
-# location of global cache
+# Location of global cache
 ENV RENV_PATHS_CACHE /renv_cache
-# location of the renv cache on the host machine
-ENV RENV_PATHS_CACHE_HOST /path/to/renv_cache
-# where the cache should be mounted in the container
+# Location of renv cache on the host machine # >>>>>>>> USER INPUT REQUIRED HERE ----
+ENV RENV_PATHS_CACHE_HOST /host/path/to/renv_cache
+# Location where the cache should be mounted in the container
 ENV RENV_PATHS_CACHE_CONTAINER /renv_cache
 
-COPY renv.lock renv.lock
-COPY .Rprofile .Rprofile 
-COPY renv/activate.R renv/activate.R
-COPY renv/settings.json renv/settings.json
+# Tell quarto R instance where workspace library is located
+RUN touch /root/.Renviron && \
+  echo R_LIBS_USER="/workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu" > /root/.Renviron
