@@ -3,7 +3,6 @@ ARG R_VERSION=4.3.3
 # Get base image
 FROM rocker/r-ver:${R_VERSION} AS os
 
-# Update & install libraries/packages
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
   apt-get --no-install-recommends install -y \
@@ -43,6 +42,8 @@ RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/down
    apt-get clean && \
    rm -rf /var/lib/apt/lists/* && \
    rm -rf quarto.deb
+# install tinytex for quarto
+RUN quarto install tinytex
 
 # Install tinytex for quarto pdf rendering
 RUN quarto install tinytex
