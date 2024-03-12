@@ -1,22 +1,20 @@
-# define R version
-ARG R_VERSION=4.3.2
-# get base image
+# Define R version
+ARG R_VERSION=4.3.3
+# Get base image
 FROM rocker/r-ver:${R_VERSION} AS os
 
-# update & install required packages/libraries
-# and clean up afterwards
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
   apt-get --no-install-recommends install -y \
-  libxml2-dev \
-  python3-pip \
+  git \
   curl \
   cmake \
-  libcurl4-openssl-dev \
-  openssh-client \
-  git \
-  pandoc \
   jags \
+  openssh-client \
+  pandoc \
+  python3-pip \
+  libxml2-dev \
+  libcurl4-openssl-dev \
   libv8-dev \
   libharfbuzz-dev \
   libfribidi-dev \ 
@@ -30,13 +28,13 @@ RUN apt-get update -qq && \
   libgdal-dev \
   libmagick++-dev \
   libglpk-dev \
-  r-cran-tcltk2 \
-  libfontconfig1-dev && \
+  libfontconfig1-dev \
+  r-cran-tcltk2  && \
   apt-get autoremove -y && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/* 
+  rm -rf /var/lib/apt/lists/*
 
-# get quarto
+# Get quarto
 RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.550/quarto-1.4.550-linux-amd64.deb && \
    apt-get update -qq && \
    apt-get install ./quarto.deb && \
@@ -47,35 +45,22 @@ RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/down
 # install tinytex for quarto
 RUN quarto install tinytex
 
-# install latest radian version from github
+# Install tinytex for quarto pdf rendering
+RUN quarto install tinytex
+
+# Install radian console from github
 RUN pip3 install -U git+https://github.com/randy3k/radian
 
-#########
-# STAGE 2
-#########
-FROM os AS tmp
-# set working directory
-WORKDIR /renv_build
-# Disable renv sandbox
+# Disable RENV sandbox
 ENV RENV_CONFIG_SANDBOX_ENABLED=FALSE
 
-# copy renv files into container
-# so they are accessible during build time
-COPY renv.lock renv.lock
-COPY .Rprofile .Rprofile 
-COPY renv/activate.R renv/activate.R
-COPY renv/settings.json renv/settings.json
+# Location of global cache
+ENV RENV_PATHS_CACHE /renv_cache
+# Location of renv cache on the host machine # >>>>>>>> USER INPUT REQUIRED HERE ----
+ENV RENV_PATHS_CACHE_HOST /host/path/to/renv_cache
+# Location where the cache should be mounted in the container
+ENV RENV_PATHS_CACHE_CONTAINER /renv_cache
 
-# Install packages into correct library (subject to WORKDIR)
-RUN R -e "install.packages(c('languageserver'))"
-RUN R -e "install.packages('remotes')" -e "remotes::install_github('nx10/httpgd')"
-
-#########
-# STAGE 3
-#########
-FROM os
-WORKDIR /renv_build
-# copy only libraries
-COPY --from=tmp /renv_build .
-# restore packages
-RUN R -e "renv::restore()"
+# Tell quarto R instance where workspace library is located
+RUN touch /root/.Renviron && \
+  echo R_LIBS_USER="/workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu" > /root/.Renviron
