@@ -4,10 +4,10 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,z",
   "workspaceFolder": "/workspaces",
   "mounts": [
-    "source=/home/ahmed/.renvcache/,target=/renv_cache,type=bind,consistency=cached"
+    "source=/home/ahmed/.renvcache/,target=/renv_cache,type=bind,z,consistency=cached"
   ],
   "postStartCommand": "R -e 'renv::restore()' -e 'renv::isolate()'",
   "customizations": {
