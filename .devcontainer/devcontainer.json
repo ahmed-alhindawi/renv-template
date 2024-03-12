@@ -4,12 +4,12 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,z",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,consistency=cached",
   "workspaceFolder": "/workspaces",
   "mounts": [
-    "source=/home/ahmed/.renvcache/,target=/renv_cache,type=bind,z,consistency=cached"
+    "source=/home/ahmed/.renvcache/,target=/renv_cache,type=bind,consistency=cached"
   ],
-  "postStartCommand": "R -e 'renv::restore()' -e 'renv::isolate()'",
+  "postStartCommand": "R -e 'renv::restore()'",
   "customizations": {
     "vscode": {
       "extensions": [
