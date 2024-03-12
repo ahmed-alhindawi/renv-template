@@ -1,7 +1,10 @@
 # Define R version
-ARG R_VERSION=4.3.3
+ARG R_VERSION_MAJ=4.3
+ARG R_VERSION_MIN=3
 # Get base image
-FROM rocker/r-ver:${R_VERSION} AS os
+FROM rocker/r-ver:${R_VERSION_MAJ}.${R_VERSION_MIN} AS os
+
+ARG R_VERSION_MAJ
 
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
@@ -56,11 +59,7 @@ ENV RENV_CONFIG_SANDBOX_ENABLED=FALSE
 
 # Location of global cache
 ENV RENV_PATHS_CACHE /renv_cache
-# Location of renv cache on the host machine # >>>>>>>> USER INPUT REQUIRED HERE ----
-ENV RENV_PATHS_CACHE_HOST /host/path/to/renv_cache
-# Location where the cache should be mounted in the container
-ENV RENV_PATHS_CACHE_CONTAINER /renv_cache
 
 # Tell quarto R instance where workspace library is located
 RUN touch /root/.Renviron && \
-  echo R_LIBS_USER="/workspaces/renv/library/R-4.3/x86_64-pc-linux-gnu" > /root/.Renviron
+  echo R_LIBS_USER="/workspaces/renv/library/${R_VERSION_MAJ}/x86_64-pc-linux-gnu" > /root/.Renviron

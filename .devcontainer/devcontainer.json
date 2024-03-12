@@ -7,7 +7,7 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,z",
   "workspaceFolder": "/workspaces",
   "mounts": [
-    "source=/host/path/to/renv_cache,target=/renv_cache,type=bind,z,consistency=cached"
+    "source=/home/ahmed/.renvcache/,target=/renv_cache,type=bind,z,consistency=cached"
   ],
   "postStartCommand": "R -e 'renv::restore()' -e 'renv::isolate()'",
   "customizations": {
