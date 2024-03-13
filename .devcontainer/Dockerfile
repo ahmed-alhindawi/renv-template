@@ -62,4 +62,4 @@ ENV RENV_PATHS_CACHE /renv_cache
 
 # Tell quarto R instance where workspace library is located
 RUN touch /root/.Renviron && \
-  echo R_LIBS_USER="/workspaces/renv/library/${R_VERSION_MAJ}/x86_64-pc-linux-gnu" > /root/.Renviron
+  echo R_LIBS_USER="/workspaces/renv/library/R-${R_VERSION_MAJ}/x86_64-pc-linux-gnu" > /root/.Renviron
