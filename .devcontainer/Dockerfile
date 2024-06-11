@@ -1,10 +1,12 @@
 # Define R version
-ARG R_VERSION_MAJ=4.3
-ARG R_VERSION_MIN=3
+ARG R_VERSION_MAJ=4.4
+ARG R_VERSION_MIN=0
+ARG PLATFORM=linux-ubuntu-jammy
 # Get base image
 FROM rocker/r-ver:${R_VERSION_MAJ}.${R_VERSION_MIN} AS os
 
 ARG R_VERSION_MAJ
+ARG PLATFORM
 
 RUN apt-get update -qq && \
   apt-get upgrade -y && \
@@ -38,16 +40,14 @@ RUN apt-get update -qq && \
   rm -rf /var/lib/apt/lists/*
 
 # Get quarto
-RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.550/quarto-1.4.550-linux-amd64.deb && \
+RUN curl -o quarto.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.555/quarto-1.4.555-linux-amd64.deb && \
    apt-get update -qq && \
    apt-get install ./quarto.deb && \
    apt-get autoremove -y && \
    apt-get clean && \
    rm -rf /var/lib/apt/lists/* && \
    rm -rf quarto.deb
-# install tinytex for quarto
-RUN quarto install tinytex
-
+   
 # Install tinytex for quarto pdf rendering
 RUN quarto install tinytex
 
@@ -62,4 +62,4 @@ ENV RENV_PATHS_CACHE /renv_cache
 
 # Tell quarto R instance where workspace library is located
 RUN touch /root/.Renviron && \
-  echo R_LIBS_USER="/workspaces/renv/library/R-${R_VERSION_MAJ}/x86_64-pc-linux-gnu" > /root/.Renviron
+  echo R_LIBS_USER="/workspaces/renv/library/${PLATFORM}/R-${R_VERSION_MAJ}/x86_64-pc-linux-gnu" > /root/.Renviron
